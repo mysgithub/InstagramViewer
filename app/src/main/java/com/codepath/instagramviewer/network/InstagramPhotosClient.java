@@ -1,5 +1,6 @@
 package com.codepath.instagramviewer.network;
 
+import android.text.format.DateUtils;
 import android.util.Log;
 
 import com.codepath.instagramviewer.adapters.InstagramPhotosAdapter;
@@ -24,6 +25,8 @@ public class InstagramPhotosClient {
   public void fetchPopularPhotos(final ArrayList<InstagramPhoto> photos, final InstagramPhotosAdapter adapter) {
     String url = "https://api.instagram.com/v1/media/popular?client_id=" + CLIENT_ID;
 
+
+
     AsyncHttpClient client = new AsyncHttpClient();
     client.get(url, new JsonHttpResponseHandler() {
       @Override
@@ -44,6 +47,7 @@ public class InstagramPhotosClient {
             }
             if (photoJSON.optJSONObject("user") != null) {
               photo.setUsername(photoJSON.getJSONObject("user").getString("username"));
+              photo.setProfilePicture(photoJSON.getJSONObject("user").getString("profile_picture"));
             }
             if (photoJSON.optJSONObject("likes") != null) {
               photo.setLikeCount(photoJSON.getJSONObject("likes").getInt("count"));
@@ -52,7 +56,13 @@ public class InstagramPhotosClient {
               photo.setImageHeight(photoJSON.getJSONObject("images").getJSONObject("standard_resolution").getInt("height"));
               photo.setImageUrl(photoJSON.getJSONObject("images").getJSONObject("standard_resolution").getString("url"));
             }
-
+            Long createdTime = Long.parseLong(photoJSON.getString("created_time"));
+            String relativeTime = DateUtils.getRelativeTimeSpanString(createdTime * 1000).toString();
+            String[] words = relativeTime.split("\\s+");
+            String formattedRelativeTime = String.format("%s%s", words[0], words[1].charAt(0));
+            photo.setCreatedTime(formattedRelativeTime);
+            //photo.setCreatedTime(DateUtils.getRelativeTimeSpanString(dateFormat.parse(createdTime).getTime()).toString());
+            //Log.i("DEBUG", convertedDate.toString());
             // Set Photos
             photos.add(photo);
           }

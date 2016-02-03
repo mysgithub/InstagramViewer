@@ -44,6 +44,24 @@ public class InstagramPhoto {
     this.imageHeight = imageHeight;
   }
 
+  public String getProfilePicture() {
+    return profilePicture;
+  }
+
+  public void setProfilePicture(String profilePicture) {
+    this.profilePicture = profilePicture;
+  }
+
+  public String getCreatedTime() {
+    return createdTime;
+  }
+
+  public void setCreatedTime(String createdTime) {
+    this.createdTime = createdTime;
+  }
+
+  private String createdTime;
+  private String profilePicture;
   private String caption;
   private String username;
   private int likeCount;
