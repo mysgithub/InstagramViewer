@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Popular Photos</string>
+    <string name="likes">10000 likes</string>
+    <string name="caption">This is sample caption to see how it will look on design view. It can be three line caption but we want to show only two lines. Third line can have more details but we will not show that.</string>
+    <string name="comment">This is sample comment</string>
 </resources>
