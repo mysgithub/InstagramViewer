@@ -1,6 +1,7 @@
 package com.codepath.instagramviewer.adapters;
 
 import android.content.Context;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,46 +26,61 @@ public class InstagramPhotosAdapter extends ArrayAdapter<InstagramPhoto> {
     super(context, android.R.layout.simple_list_item_1, objects);
   }
 
+  static class ViewHolderItem {
+    ImageView ivProfile;
+    ImageView ivPhoto;
+    TextView tvCaption;
+    TextView tvUsername;
+    TextView tvTime;
+    TextView tvLikes;
+    TextView tvComment;
+  }
+
   @Override
   public View getView(int position, View convertView, ViewGroup parent) {
+    ViewHolderItem viewHolder;
     // Get data
     InstagramPhoto photo = getItem(position);
     // Is Recycle
     if (convertView == null) {
       convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_photo, parent, false);
+      // Set up view holder
+      viewHolder = new ViewHolderItem();
+      viewHolder.ivProfile = (RoundedImageView) convertView.findViewById(R.id.ivProfile);
+      viewHolder.tvCaption = (TextView) convertView.findViewById(R.id.tvCaption);
+      viewHolder.ivPhoto = (ImageView) convertView.findViewById(R.id.ivPhoto);
+      viewHolder.tvUsername = (TextView) convertView.findViewById(R.id.tvUsername);
+      viewHolder.tvTime = (TextView) convertView.findViewById(R.id.tvTime);
+      viewHolder.tvLikes = (TextView) convertView.findViewById(R.id.tvLikes);
+      viewHolder.tvComment = (TextView) convertView.findViewById(R.id.tvComment);
+      // Store view holder with the view
+      convertView.setTag(viewHolder);
+    }else {
+      viewHolder = (ViewHolderItem) convertView.getTag();
     }
-    // UI elements
-    ImageView ivProfile = (RoundedImageView) convertView.findViewById(R.id.ivProfile);
-    TextView tvCaption = (TextView) convertView.findViewById(R.id.tvCaption);
-    ImageView ivPhoto = (ImageView) convertView.findViewById(R.id.ivPhoto);
-    TextView tvUsername = (TextView) convertView.findViewById(R.id.tvUsername);
-    TextView tvTime = (TextView) convertView.findViewById(R.id.tvTime);
-    TextView tvLikes = (TextView) convertView.findViewById(R.id.tvLikes);
+
     // Profile Picture
-    Transformation transformation = new RoundedTransformationBuilder()
-        .cornerRadiusDp(25)
+    Transformation transformation = new RoundedTransformationBuilder().cornerRadiusDp(25)
         .oval(false)
         .build();
-    Picasso.with(getContext())
-        .load(photo.getProfilePicture())
-        .fit()
-        .transform(transformation)
-        .into(ivProfile);
+    Picasso.with(getContext()).load(photo.getProfilePicture()).fit().transform(transformation)
+        .into(viewHolder.ivProfile);
     // Username
-    tvUsername.setText(photo.getUsername());
+    viewHolder.tvUsername.setText(photo.getUsername());
     // Caption
-    tvCaption.setText(photo.getCaption());
+    viewHolder.tvCaption.setText(photo.getCaption());
     // Image
-    ivPhoto.setImageResource(0);
+    viewHolder.ivPhoto.setImageResource(0);
 
     Picasso.with(getContext())
         .load(photo.getImageUrl())
-        .into(ivPhoto);
+        .placeholder(R.drawable.ic_picture_240)
+        .into(viewHolder.ivPhoto);
     // Relative Time
-    tvTime.setText(photo.getCreatedTime());
+    viewHolder.tvTime.setText(photo.getCreatedTime());
     // Likes
-    tvLikes.setText(String.format("%d likes", photo.getLikeCount()));
-
+    viewHolder.tvLikes.setText(String.format("%,d likes", photo.getLikeCount()));
+    viewHolder.tvComment.setText(Html.fromHtml(photo.getLatestComment()));
     // Insert Model
     // Return
     return convertView;

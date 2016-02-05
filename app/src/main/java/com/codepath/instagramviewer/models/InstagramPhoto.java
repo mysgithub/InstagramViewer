@@ -60,6 +60,16 @@ public class InstagramPhoto {
     this.createdTime = createdTime;
   }
 
+
+  public String getLatestComment() {
+    return latestComment;
+  }
+
+  public void setLatestComment(String latestComment) {
+    this.latestComment = latestComment;
+  }
+
+  private String latestComment;
   private String createdTime;
   private String profilePicture;
   private String caption;

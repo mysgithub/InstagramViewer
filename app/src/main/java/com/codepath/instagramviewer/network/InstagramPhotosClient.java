@@ -61,6 +61,13 @@ public class InstagramPhotosClient {
             String[] words = relativeTime.split("\\s+");
             String formattedRelativeTime = String.format("%s%s", words[0], words[1].charAt(0));
             photo.setCreatedTime(formattedRelativeTime);
+            if (photoJSON.optJSONObject("comments") != null) {
+              JSONArray commentsJSON = photoJSON.optJSONObject("comments").getJSONArray("data");
+              if(commentsJSON.length() > 0){
+                String user = commentsJSON.getJSONObject(0).optJSONObject("from").getString("username");
+                photo.setLatestComment("<font color=#648cb7><b>" + user + "</b></font> "+ commentsJSON.getJSONObject(0).getString("text"));
+              }
+            }
             //photo.setCreatedTime(DateUtils.getRelativeTimeSpanString(dateFormat.parse(createdTime).getTime()).toString());
             //Log.i("DEBUG", convertedDate.toString());
             // Set Photos
