@@ -99,7 +99,6 @@
         android:id="@+id/tvComment"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:maxLines="2"
         android:ellipsize="end"
         android:textSize="12sp"
         android:typeface="sans"

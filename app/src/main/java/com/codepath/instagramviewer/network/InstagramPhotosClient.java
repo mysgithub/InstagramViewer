@@ -64,8 +64,19 @@ public class InstagramPhotosClient {
             if (photoJSON.optJSONObject("comments") != null) {
               JSONArray commentsJSON = photoJSON.optJSONObject("comments").getJSONArray("data");
               if(commentsJSON.length() > 0){
-                String user = commentsJSON.getJSONObject(0).optJSONObject("from").getString("username");
-                photo.setLatestComment("<font color=#648cb7><b>" + user + "</b></font> "+ commentsJSON.getJSONObject(0).getString("text"));
+                String comment;
+                if(commentsJSON.length() > 1){
+                  comment = "<font color=#648cb7><b>" + commentsJSON.getJSONObject(0).optJSONObject("from").getString("username") + "</b></font> "
+                      + commentsJSON.getJSONObject(0).getString("text")
+                      + "<br><br>"
+                      + "<font color=#648cb7><b>" + commentsJSON.getJSONObject(1).optJSONObject("from").getString("username") + "</b></font> "
+                      + commentsJSON.getJSONObject(1).getString("text");
+                }else{
+                  comment = "<font color=#648cb7><b>"
+                      + commentsJSON.getJSONObject(0).optJSONObject("from").getString("username")
+                      + "</b></font> "+ commentsJSON.getJSONObject(0).getString("text");
+                }
+                photo.setLatestComment(comment);
               }
             }
             //photo.setCreatedTime(DateUtils.getRelativeTimeSpanString(dateFormat.parse(createdTime).getTime()).toString());
